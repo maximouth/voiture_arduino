@@ -3,6 +3,7 @@
 #define STOP 0
 #define MARCHE 127
 #define TURN 50
+#define KLX 110
 
 
 SoftwareSerial bluetooth_card (8,7);
@@ -134,7 +135,7 @@ void loop() {
       //klaxon
     case 'k' :
       Serial.println ("klaxon");
-      analogWrite(9,100);
+      analogWrite(9,KLX);
       time1 = millis();
       break;
 
