@@ -52,11 +52,18 @@ void setup() {
 
 }
 
+unsigned long time1;
+unsigned long time2;
+
 
 void loop() {
 
   char dir;
 
+  if (((time2 = millis()) - time1) > 1000) {
+    analogWrite(9,0);
+  }
+  
   if (Serial.available()) {
     //  if (bluetooth_card.available()) {
     dir = Serial.read();
@@ -82,13 +89,13 @@ void loop() {
     case 'u' :
       Serial.println ("avance");
 
-      analogWrite(mt_g,MARCHE);
-      analogWrite(mt_d,MARCHE);
-
       digitalWrite (b2, LOW);
       digitalWrite (b7, HIGH);
       digitalWrite (b10, LOW);
       digitalWrite (b15, HIGH);
+
+      analogWrite(mt_g,MARCHE);
+      analogWrite(mt_d,MARCHE);
 
       break;
 
@@ -114,19 +121,21 @@ void loop() {
     case 'd' :
       Serial.println ("reculer");
 
-      analogWrite(mt_d,MARCHE);
-      analogWrite(mt_g,MARCHE);
-
       digitalWrite (b2, HIGH);
       digitalWrite (b7, LOW);
       digitalWrite (b10, HIGH);
       digitalWrite (b15, LOW);
 
+      analogWrite(mt_d,MARCHE);
+      analogWrite(mt_g,MARCHE);
+      
       break;
 
       //klaxon
     case 'k' :
       Serial.println ("klaxon");
+      analogWrite(9,100);
+      time1 = millis();
       break;
 
     default :
