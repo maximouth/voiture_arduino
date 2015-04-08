@@ -34,7 +34,7 @@ bluetooth_card.write(val);  // envoie le char "val" sur la voie série
 
 void setup() {
   bluetooth_card.begin(9600);// démarre la voie série à la vitesse speed
-  Serial.begin(9600);
+  //  Serial.begin(9600);
   
   pinMode(klaxon, OUTPUT);
 
@@ -65,16 +65,16 @@ void loop() {
     analogWrite(9,0);
   }
   
-  if (Serial.available()) {
-    //  if (bluetooth_card.available()) {
-    dir = Serial.read();
-    // dir bluetooth_card.read();
+//  if (Serial.available()) {
+  if (bluetooth_card.available()) {
+    //    dir = Serial.read();
+    dir =  bluetooth_card.read();
 
     switch (dir) {
 
       //arreter la voiture
     case 'b' :
-      Serial.println ("arret");
+      //  Serial.println ("arret");
 
       analogWrite(mt_g,STOP);
       analogWrite(mt_d,STOP);
@@ -88,12 +88,12 @@ void loop() {
       
       //faire avancer la voiture
     case 'u' :
-      Serial.println ("avance");
+      //Serial.println ("avance");
 
       digitalWrite (b2, LOW);
       digitalWrite (b7, HIGH);
-      digitalWrite (b10, LOW);
-      digitalWrite (b15, HIGH);
+      digitalWrite (b10, HIGH);
+      digitalWrite (b15, LOW);
 
       analogWrite(mt_g,MARCHE);
       analogWrite(mt_d,MARCHE);
@@ -102,7 +102,7 @@ void loop() {
 
       //tourner à droite
     case 'r' :
-      Serial.println ("droite");
+      //Serial.println ("droite");
 
       analogWrite(mt_g,MARCHE);
       analogWrite(mt_d,TURN);
@@ -111,7 +111,7 @@ void loop() {
 
       //tourner à gauche
     case 'l' :
-      Serial.println ("gauche");
+      //Serial.println ("gauche");
 
       analogWrite(mt_d,MARCHE);
       analogWrite(mt_g,TURN);
@@ -120,12 +120,12 @@ void loop() {
 
       //reculer
     case 'd' :
-      Serial.println ("reculer");
+      //Serial.println ("reculer");
 
       digitalWrite (b2, HIGH);
       digitalWrite (b7, LOW);
-      digitalWrite (b10, HIGH);
-      digitalWrite (b15, LOW);
+      digitalWrite (b10, LOW);
+      digitalWrite (b15, HIGH);
 
       analogWrite(mt_d,MARCHE);
       analogWrite(mt_g,MARCHE);
@@ -134,13 +134,13 @@ void loop() {
 
       //klaxon
     case 'k' :
-      Serial.println ("klaxon");
+      //Serial.println ("klaxon");
       analogWrite(9,KLX);
       time1 = millis();
       break;
 
     default :
-      Serial.println ("mauvais");
+      //Serial.println ("mauvais");
       break;
 
     }
