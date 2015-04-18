@@ -8,6 +8,10 @@
 
 SoftwareSerial bluetooth_card (8,7);
 
+// ultrason
+const int trig = 4;
+const int echo = 6;
+
 //klaxon
 const int klaxon = 9;
 
@@ -29,7 +33,7 @@ const int b15 = 11;
 bluetooth_card.available(); // retourne le nombre de caractère à lire
 bluetooth_card.read();     // retourne le prochain caractère reçu
 bluetooth_card.write(val);  // envoie le char "val" sur la voie série
- */
+  */
 
 
 void setup() {
@@ -38,6 +42,9 @@ void setup() {
   
   pinMode(klaxon, OUTPUT);
 
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  
   pinMode(mt_g, OUTPUT);
   pinMode(mt_d, OUTPUT);
 
@@ -56,24 +63,29 @@ void setup() {
 unsigned long time1;
 unsigned long time2;
 
+int distance;
+int duration;
+int flag = 0;
+char dir;
 
 void loop() {
-
-  char dir;
 
   if (((time2 = millis()) - time1) > 1000) {
     analogWrite(9,0);
   }
+
+
+  //regarder la distance de l'objet devant la voiture � chaque tour
+     digitalWrite(trig, HIGH);
+     delayMicroseconds(10);                  
+     digitalWrite(trig, LOW);
   
-//  if (Serial.available()) {
-  if (bluetooth_card.available()) {
-    //    dir = Serial.read();
-    dir =  bluetooth_card.read();
+    duration = pulseIn(echo, HIGH);
+    distance = (duration/2)/29;
+    pulseIn(echo, LOW);
 
-    switch (dir) {
-
-      //arreter la voiture
-    case 'b' :
+  // si l'objet est � moins de 10 cm flag = 1
+  if (distance <= 20) {
       //  Serial.println ("arret");
 
       analogWrite(mt_g,STOP);
@@ -83,69 +95,93 @@ void loop() {
       digitalWrite (b7, LOW);
       digitalWrite (b10, LOW);
       digitalWrite (b15, LOW);
+     
+  }
+  else
+    {
+      //  if (Serial.available()) {
+      if (bluetooth_card.available()) {
+	//    dir = Serial.read();
+    
+	dir = bluetooth_card.read();
 
-      break;
+	switch (dir) {
+
+	  //arreter la voiture
+	case 'b' :
+	  //  Serial.println ("arret");
+
+	  analogWrite(mt_g,STOP);
+	  analogWrite(mt_d,STOP);
+
+	  digitalWrite (b2, LOW);
+	  digitalWrite (b7, LOW);
+	  digitalWrite (b10, LOW);
+	  digitalWrite (b15, LOW);
+
+	  break;
       
-      //faire avancer la voiture
-    case 'u' :
-      //Serial.println ("avance");
+	  //faire avancer la voiture
+	case 'u' :
+	  //Serial.println ("avance");
 
-      digitalWrite (b2, LOW);
-      digitalWrite (b7, HIGH);
-      digitalWrite (b10, HIGH);
-      digitalWrite (b15, LOW);
+	  digitalWrite (b2, LOW);
+	  digitalWrite (b7, HIGH);
+	  digitalWrite (b10, HIGH);
+	  digitalWrite (b15, LOW);
 
-      analogWrite(mt_g,MARCHE);
-      analogWrite(mt_d,MARCHE);
+	  analogWrite(mt_g,MARCHE);
+	  analogWrite(mt_d,MARCHE);
 
-      break;
+	  break;
 
-      //tourner à droite
-    case 'r' :
-      //Serial.println ("droite");
+	  //tourner à gauche
+	case 'l' :
+	  //Serial.println ("droite");
 
-      analogWrite(mt_g,MARCHE);
-      analogWrite(mt_d,TURN);
+	  analogWrite(mt_g,MARCHE+80);
+	  analogWrite(mt_d,TURN-10);
 
-      break;
+	  break;
 
-      //tourner à gauche
-    case 'l' :
-      //Serial.println ("gauche");
+	  //tourner à droite
+	case 'r' :
+	  //Serial.println ("gauche");
 
-      analogWrite(mt_d,MARCHE);
-      analogWrite(mt_g,TURN);
+	  analogWrite(mt_d,MARCHE+80);
+	  analogWrite(mt_g,TURN-10);
 
-      break;
+	  break;
 
-      //reculer
-    case 'd' :
-      //Serial.println ("reculer");
+	  //reculer
+	case 'd' :
+	  //Serial.println ("reculer");
 
-      digitalWrite (b2, HIGH);
-      digitalWrite (b7, LOW);
-      digitalWrite (b10, LOW);
-      digitalWrite (b15, HIGH);
+	  digitalWrite (b2, HIGH);
+	  digitalWrite (b7, LOW);
+	  digitalWrite (b10, LOW);
+	  digitalWrite (b15, HIGH);
 
-      analogWrite(mt_d,MARCHE);
-      analogWrite(mt_g,MARCHE);
+	  analogWrite(mt_d,MARCHE);
+	  analogWrite(mt_g,MARCHE);
       
-      break;
+	  break;
 
-      //klaxon
-    case 'k' :
-      //Serial.println ("klaxon");
-      analogWrite(9,KLX);
-      time1 = millis();
-      break;
+	  //klaxon
+	case 'k' :
+	  //Serial.println ("klaxon");
+	  analogWrite(9,KLX);
+	  time1 = millis();
+	  break;
 
-    default :
-      //Serial.println ("mauvais");
-      break;
+	default :
+	  //Serial.println ("mauvais");
+	  break;
+
+	}
+    
+      }
 
     }
-    
-  }
-
 }
 	
