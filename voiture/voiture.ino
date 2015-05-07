@@ -85,7 +85,7 @@ void loop() {
     pulseIn(echo, LOW);
 
   // si l'objet est à moins de 10 cm flag = 1
-  if (distance <= 20) {
+  if (distance <= 30) {
       //  Serial.println ("arret");
 
       analogWrite(mt_g,STOP);
