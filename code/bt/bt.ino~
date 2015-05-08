@@ -1,0 +1,22 @@
+#include #include <SoftwareSerial.h>
+
+char data;
+SoftwareSerial btsp(8,7); // declaration de notre objet
+
+
+void setup() {
+  bluetooth_card.begin(9600); // initialise le hc-05
+  Serial.begin(9600); // initialise le port serie de l'arduino
+}
+
+void loop() {
+
+  if (btsp.available()) {   
+    data=btsp.read(); 
+    Serial.println (data) ;
+    delay (100) ;
+  }
+
+}
+
+
