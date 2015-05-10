@@ -1,28 +1,20 @@
+const int spk = 9;
+int x = 0;
 
-/*
- Piezo
- 
- This example shows how to run a Piezo Buzzer on pin 9
- using the analogWrite() function.
- 
- It beeps 3 times fast at startup, waits a second then beeps continuously
- at a slower pace
- 
- */
 
 void setup()  { 
   // declare pin 9 to be an output:
-  pinMode(9, OUTPUT);
+  pinMode(spk, OUTPUT);
  } 
 
 void loop()  { 
-   beep(); 
+  beep(); 
+  x = (x+1)%256;
   delay (2000);
 }
 
 void beep(){
-  analogWrite(9,100);      // Almost any value can be used except 0 and 255
+  analogWrite(spk,x);      // x va prendre une valeur differente à chaque tour
   delay (1000);
-  analogWrite(9,0);      // Almost any value can be used except 0 and 255
-
+  analogWrite(spk,0); 
 }  
