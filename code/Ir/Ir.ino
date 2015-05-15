@@ -19,7 +19,7 @@ void loop() {
   
   duration = pulseIn(echo, HIGH);
   distance = (duration/2)/29;
-  duration = pulseIn(echo, LOW);
+  //  duration = pulseIn(echo, LOW); a priori inutile
   Serial.println ( distance );
   // Serial.println  ("cm");
 
