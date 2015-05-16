@@ -28,11 +28,9 @@ void loop() {
     if (x < 1) {
       sens = 0;
       x = 1;
-    }
-    
+    }    
   }
 
   delay (500);
-  
   
 }
