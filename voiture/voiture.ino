@@ -82,7 +82,7 @@ void loop() {
   
     duration = pulseIn(echo, HIGH);
     distance = (duration/2)/29;
-    pulseIn(echo, LOW);
+    // pulseIn(echo, LOW);
 
   // si l'objet est à moins de 10 cm flag = 1
   if (distance <= 30) {
